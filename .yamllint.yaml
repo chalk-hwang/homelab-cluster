@@ -1,0 +1,21 @@
+---
+extends: default
+
+rules:
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+  line-length:
+    level: warning
+    max: 100
+    allow-non-breakable-inline-mappings: true
+    allow-non-breakable-words: true
+
+  braces:
+    forbid: false
+    min-spaces-inside: 1
+    max-spaces-inside: 1
+    min-spaces-inside-empty: -1
+    max-spaces-inside-empty: -1
+
