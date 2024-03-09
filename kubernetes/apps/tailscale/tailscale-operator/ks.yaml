@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ingress-nginx-issuers
+    - name: cert-manager-issuers
   path: ./kubernetes/apps/tailscale/tailscale-operator/app
   prune: true
   sourceRef:
