@@ -21,19 +21,15 @@ spec:
     remediation:
       retries: 3
   values:
-    fullnameOverride: k8s-gateway
+    fullnameOverride: exdns-1-k8s-gateway
     domain: "${SECRET_DOMAIN}"
-    apex: exdns-1-k8s-gateway.kube-system
+    apex: exdns-1-k8s-gateway.network
     ttl: 1
     service:
       type: LoadBalancer
       port: 54
       useTcp: true
-      loadBalancerIP: 10.10.0.253
+      loadBalancerIP: 10.10.0.1
       annotations:
-        tailscale.com/expose: "true"
-        tailscale.com/hostname: "k8s-gateway"
-        io.cilium/lb-ipam-ips: "10.10.0.253"
+        io.cilium/lb-ipam-ips: "10.10.0.1"
       externalTrafficPolicy: Cluster
-      externalIPs:
-        - 100.110.0.253

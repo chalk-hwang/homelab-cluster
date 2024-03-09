@@ -25,20 +25,21 @@ spec:
     bgpControlPlane:
       enabled: true
     bpf:
-      masquerade: false
+      masquerade: true
     cgroup:
       automount:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cluster:
       id: 1
-      name: home-kubernetes
+      name: homelab
     containerRuntime:
       integration: containerd
       socketPath: /var/run/k3s/containerd/containerd.sock
     # NOTE: This might need to be set if you have more than one active NIC on your hosts
-    # devices:
-    #   - eno0
+    devices:
+      - eth0
+    l7Proxy: true
     endpointRoutes:
       enabled: true
     hubble:
@@ -76,7 +77,11 @@ spec:
             - hosts:
                 - "hubble.${SECRET_DOMAIN}"
     ipam:
-      mode: kubernetes
+      mode: "cluster-pool"
+      operator:
+        clusterPoolIPv4PodCIDRList:
+          - "${POD_CIDR}"
+        clusterPoolIPv4MaskSize: 24
     ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
     k8sServiceHost: 127.0.0.1
     k8sServicePort: 6444
