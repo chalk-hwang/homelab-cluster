@@ -2,10 +2,12 @@
 apiVersion: tailscale.com/v1alpha1
 kind: Connector
 metadata:
-  name: tailscale-connector
+  name: tailscale-operator
 spec:
-  hostname: homelab
+  hostname: homelab-prod
   subnetRouter:
     advertiseRoutes:
+      - "10.0.7.0/24"
       - "10.11.0.0/16"
+      - "10.12.0.0/16"
   exitNode: true
