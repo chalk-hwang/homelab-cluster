@@ -2,7 +2,7 @@
 apiVersion: tailscale.com/v1alpha1
 kind: Connector
 metadata:
-  name: tailscale-operator
+  name: tailscale-operator-connector
 spec:
   hostname: homelab-prod
   subnetRouter:
