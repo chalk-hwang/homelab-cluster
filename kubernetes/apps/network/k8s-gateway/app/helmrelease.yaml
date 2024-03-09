@@ -27,6 +27,8 @@ spec:
     service:
       type: LoadBalancer
       port: 53
+      loadBalancerIP: "10.0.7.254"
       annotations:
         "kube-vip.io/loadbalancerIPs": "10.0.7.254"
+        "kube-vip.io/vipHost": " k8s-gateway"
       externalTrafficPolicy: Cluster
