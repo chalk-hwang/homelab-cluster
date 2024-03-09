@@ -27,7 +27,8 @@ spec:
     service:
       type: LoadBalancer
       port: 53
-      loadBalancerClass: tailscale
       annotations:
+        tailscale.com/expose: "true"
+        tailscale.com/hostname: "k8s-gateway"
         io.cilium/lb-ipam-ips: "10.10.0.253"
       externalTrafficPolicy: Cluster
