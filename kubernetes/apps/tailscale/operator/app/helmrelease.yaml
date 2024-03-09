@@ -1,0 +1,37 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app system-upgrade-controller
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: tailscale-operator
+      version: 1.60.0
+      sourceRef:
+        kind: HelmRepository
+        name: tailscale
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    crd
+    operatorConfig:
+      # ACL tag that operator will be tagged with. Operator must be made owner of
+      # these tags
+      # https://tailscale.com/kb/1236/kubernetes-operator/?q=operator#setting-up-the-kubernetes-operator
+      # Multiple tags are defined as array items and passed to the operator as a comma-separated string
+      defaultTags:
+        - "tag:k8s-operator"
+
+    # apiServerProxyConfig allows to configure whether the operator should expose
+    # Kubernetes API server.
+    # https://tailscale.com/kb/1236/kubernetes-operator/#accessing-the-kubernetes-control-plane-using-an-api-server-proxy
+    apiServerProxyConfig:
+      mode: "true" # "true", "false", "noauth"
