@@ -28,5 +28,5 @@ spec:
       type: LoadBalancer
       port: 53
       annotations:
-        io.cilium/lb-ipam-ips: "10.10.0.253"
+        "kube-vip.io/loadbalancerIPs": "10.0.7.254"
       externalTrafficPolicy: Cluster
