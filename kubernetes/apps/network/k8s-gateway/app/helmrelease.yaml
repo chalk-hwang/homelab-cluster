@@ -32,4 +32,6 @@ spec:
       loadBalancerIP: 10.10.0.1
       annotations:
         io.cilium/lb-ipam-ips: "10.10.0.1"
+        tailscale.com/expose: "true"
+        tailscale.com/hostname: "exdns-1-k8s-gateway"
       externalTrafficPolicy: Cluster
