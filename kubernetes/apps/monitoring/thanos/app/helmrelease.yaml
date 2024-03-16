@@ -67,7 +67,7 @@ spec:
         enabled: false
     queryFrontend:
       enabled: true
-      replicaCount: 2
+      replicaCount: 1
       config: &config |-
         type: REDIS
         config:
@@ -99,7 +99,7 @@ spec:
         enabled: false
     bucketweb:
       enabled: true
-      replicaCount: 2
+      replicaCount: 1
       networkPolicy:
         enabled: false
     compactor:
@@ -118,7 +118,7 @@ spec:
         enabled: false
     storegateway:
       enabled: true
-      replicaCount: 2
+      replicaCount: 1
       config: *config
       persistence:
         enabled: true
@@ -128,7 +128,7 @@ spec:
         enabled: false
     ruler:
       enabled: true
-      replicaCount: 2
+      replicaCount: 1
       replicaLabel: __replica__
       alertmanagers: ["http://alertmanager-operated.monitoring.svc.cluster.local:9093"]
       extraFlags: ["--web.prefix-header=X-Forwarded-Prefix"]
