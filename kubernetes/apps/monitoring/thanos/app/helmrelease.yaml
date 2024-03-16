@@ -89,7 +89,7 @@ spec:
         enabled: false
     query:
       enabled: true
-      replicaCount: 2
+      replicaCount: 1
       replicaLabel: ["__replica__"]
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
