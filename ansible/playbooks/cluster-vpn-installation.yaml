@@ -16,19 +16,8 @@
         - name: Tailscale | Init credentials variables
           ansible.builtin.include_tasks: tasks/load-vpn-config.yaml
 
-        - name: Tailscale | Uninstall if already installed
-          ansible.builtin.include_role:
-            name: artis3n.tailscale
-          vars:
-            state: absent
-
-        - name: Tailscale | Init credentials variables
-          ansible.builtin.include_tasks: tasks/load-vpn-config.yaml
-
         - name: Tailscale | Install
           ansible.builtin.include_role:
             name: artis3n.tailscale
-
-        # Force these to run before we start uninstalling things
-        - name: Tailscale | Flush Handlers
-          ansible.builtin.meta: flush_handlers
+          vars:
+            state: latest
