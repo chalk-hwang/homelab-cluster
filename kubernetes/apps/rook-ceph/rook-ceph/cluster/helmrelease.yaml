@@ -88,7 +88,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: true
-        deviceFilter: nvme0n1
+        deviceFilter: nvme0n1p7
         config:
           osdsPerDevice: "1"
       placement:
@@ -105,7 +105,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 3
+            size: 1
         storageClass:
           enabled: true
           name: ceph-block
@@ -133,11 +133,11 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 3
+              size: 1
           dataPools:
             - failureDomain: host
               replicated:
-                size: 3
+                size: 1
               name: data0
           metadataServer:
             activeCount: 1
@@ -176,7 +176,7 @@ spec:
           metadataPool:
             failureDomain: host
             replicated:
-              size: 3
+              size: 1
           dataPool:
             failureDomain: host
             erasureCoded:
@@ -191,7 +191,7 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 2Gi
-            instances: 2
+            instances: 1
             priorityClassName: system-cluster-critical
           healthCheck:
             bucket:
@@ -202,7 +202,7 @@ spec:
           reclaimPolicy: Delete
           volumeBindingMode: Immediate
           parameters:
-            region: us-east-1
+            region: us-west-1
         ingress:
           enabled: true
           ingressClassName: internal
