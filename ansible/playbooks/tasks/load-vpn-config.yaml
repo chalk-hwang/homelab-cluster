@@ -1,0 +1,17 @@
+---
+- name: Tailscale | Get Secret
+  ansible.builtin.command: op read "op://local/tailscale_metal-oauth/CLIENT_SECRET"
+  register: tailscale_oauth_secret
+  delegate_to: localhost
+  become: false
+  changed_when: false
+
+- name: Tailscale | Set default variables
+  ansible.builtin.set_fact:
+    tailscale_authkey: "{{ tailscale_oauth_secret.stdout }}"
+    tailscale_args: "--ssh --advertise-exit-node --accept-routes=false --accept-dns=false"
+    tailscale_tags:
+      - "metal"
+    # Optionally, also include:
+    tailscale_oauth_ephemeral: false
+    tailscale_oauth_preauthorized: true

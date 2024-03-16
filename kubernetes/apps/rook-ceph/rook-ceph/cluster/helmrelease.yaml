@@ -50,62 +50,33 @@ spec:
       bdev_async_discard = true
       osd_class_update_on_start = false
     cephClusterSpec:
-      network:
-        provider: host
-        connections:
-          requireMsgr2: true
-      resources:
-        mgr:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            memory: 2Gi
-        mon:
-          requests:
-            cpu: 50m
-            memory: 512Mi
-          limits:
-            memory: 1Gi
-        osd:
-          requests:
-            cpu: 500m
-            memory: 2Gi
-          limits:
-            memory: 6Gi
-        mgr-sidecar:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            memory: 256Mi
-      crashCollector:
-        disable: false
+      dataDirHostPath: /dev/kube-data
+      cephVersion:
+        image: quay.io/ceph/ceph:v18
+        allowUnsupported: true
+      mon:
+        count: 1
+        allowMultiplePerNode: true
+      mgr:
+        count: 1
+        allowMultiplePerNode: true
+        modules:
+          - name: rook
+            enabled: true
       dashboard:
         enabled: true
-        urlPrefix: /
-        ssl: false
+      crashCollector:
+        disable: true
       storage:
         useAllNodes: true
         useAllDevices: true
-        deviceFilter: nvme0n1p7
-        config:
-          osdsPerDevice: "1"
-      placement:
-        mgr: &placement
-          nodeAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon: *placement
+        #deviceFilter:
     cephBlockPools:
       - name: ceph-blockpool
         spec:
-          failureDomain: host
           replicated:
             size: 1
+            requireSafeReplicaSize: false
         storageClass:
           enabled: true
           name: ceph-block
@@ -128,87 +99,3 @@ spec:
       name: csi-ceph-blockpool
       isDefault: false
       deletionPolicy: Delete
-    cephFileSystems:
-      - name: ceph-filesystem
-        spec:
-          metadataPool:
-            replicated:
-              size: 1
-          dataPools:
-            - failureDomain: host
-              replicated:
-                size: 1
-              name: data0
-          metadataServer:
-            activeCount: 1
-            activeStandby: true
-            resources:
-              requests:
-                cpu: 100m
-                memory: 1Gi
-              limits:
-                memory: 4Gi
-            priorityClassName: system-cluster-critical
-        storageClass:
-          enabled: true
-          isDefault: false
-          name: ceph-filesystem
-          pool: data0
-          reclaimPolicy: Delete
-          allowVolumeExpansion: true
-          volumeBindingMode: Immediate
-          parameters:
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
-            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-            csi.storage.k8s.io/fstype: ext4
-    cephFileSystemVolumeSnapshotClass:
-      enabled: true
-      name: csi-ceph-filesystem
-      isDefault: false
-      deletionPolicy: Delete
-    cephObjectStores:
-      - name: ceph-objectstore
-        spec:
-          metadataPool:
-            failureDomain: host
-            replicated:
-              size: 1
-          dataPool:
-            failureDomain: host
-            erasureCoded:
-              dataChunks: 2
-              codingChunks: 1
-          preservePoolsOnDelete: true
-          gateway:
-            port: 80
-            resources:
-              requests:
-                cpu: 100m
-                memory: 1Gi
-              limits:
-                memory: 2Gi
-            instances: 1
-            priorityClassName: system-cluster-critical
-          healthCheck:
-            bucket:
-              interval: 60s
-        storageClass:
-          enabled: true
-          name: ceph-bucket
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
-          parameters:
-            region: us-west-1
-        ingress:
-          enabled: true
-          ingressClassName: internal
-          host:
-            name: &host rgw.chalk-ho.me
-            path: /
-          tls:
-            - hosts:
-                - *host
