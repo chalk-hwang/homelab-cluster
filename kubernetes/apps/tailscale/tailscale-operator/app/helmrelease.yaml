@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: *app
-      version: 1.60.0
+      version: 1.62.0
       sourceRef:
         kind: HelmRepository
         name: tailscale
@@ -25,7 +25,7 @@ spec:
     operatorConfig:
       image:
         repo: tailscale/k8s-operator
-        tag: v1.60.1
+        tag: v1.62.0
       # ACL tag that operator will be tagged with. Operator must be made owner of
       # these tags
       # https://tailscale.com/kb/1236/kubernetes-operator/?q=operator#setting-up-the-kubernetes-operator
@@ -38,7 +38,7 @@ spec:
         repo: tailscale/tailscale
         # Digest will be prioritized over tag. If neither are set appVersion will be
         # used.
-        tag: "v1.60.1"
+        tag: "v1.62.0"
       # ACL tag that operator will tag proxies with. Operator must be made owner of
       # these tags
       # https://tailscale.com/kb/1236/kubernetes-operator/?q=operator#setting-up-the-kubernetes-operator

@@ -5,4 +5,5 @@ kubernetes:
       hosts:
         "metal-a":
           ansible_user: "chalk"
-          ansible_host: "10.0.7.10"
+          ansible_host: "metal-a"
+          ansible_nodeip: "10.0.7.10"
