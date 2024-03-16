@@ -20,6 +20,7 @@ resources:
   - node-feature-discovery.yaml
   - onepassword-connect.yaml
   - openebs.yaml
+  - piraeus.yaml
   - prometheus-community.yaml
   - rook-ceph.yaml
   - stakater.yaml
