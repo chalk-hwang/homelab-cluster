@@ -38,7 +38,7 @@ spec:
       socketPath: /var/run/k3s/containerd/containerd.sock
     # NOTE: This might need to be set if you have more than one active NIC on your hosts
     devices:
-      - eth0
+    - end0
     l7Proxy: true
     endpointRoutes:
       enabled: true
@@ -46,13 +46,13 @@ spec:
       enabled: true
       metrics:
         enabled:
-          - dns:query
-          - drop
-          - tcp
-          - flow
-          - port-distribution
-          - icmp
-          - http
+        - dns:query
+        - drop
+        - tcp
+        - flow
+        - port-distribution
+        - icmp
+        - http
         serviceMonitor:
           enabled: true
         dashboards:
@@ -72,15 +72,15 @@ spec:
           enabled: true
           className: internal
           hosts:
-            - "hubble.${SECRET_DOMAIN}"
+          - "hubble.${SECRET_DOMAIN}"
           tls:
-            - hosts:
-                - "hubble.${SECRET_DOMAIN}"
+          - hosts:
+            - "hubble.${SECRET_DOMAIN}"
     ipam:
       mode: "cluster-pool"
       operator:
         clusterPoolIPv4PodCIDRList:
-          - "${POD_CIDR}"
+        - "${POD_CIDR}"
         clusterPoolIPv4MaskSize: 24
     ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
     k8sServiceHost: 127.0.0.1
@@ -118,18 +118,18 @@ spec:
     securityContext:
       capabilities:
         ciliumAgent:
-          - CHOWN
-          - KILL
-          - NET_ADMIN
-          - NET_RAW
-          - IPC_LOCK
-          - SYS_ADMIN
-          - SYS_RESOURCE
-          - DAC_OVERRIDE
-          - FOWNER
-          - SETGID
-          - SETUID
+        - CHOWN
+        - KILL
+        - NET_ADMIN
+        - NET_RAW
+        - IPC_LOCK
+        - SYS_ADMIN
+        - SYS_RESOURCE
+        - DAC_OVERRIDE
+        - FOWNER
+        - SETGID
+        - SETUID
         cleanCiliumState:
-          - NET_ADMIN
-          - SYS_ADMIN
-          - SYS_RESOURCE
+        - NET_ADMIN
+        - SYS_ADMIN
+        - SYS_RESOURCE
