@@ -29,7 +29,7 @@ spec:
       socketPath: /var/run/k3s/containerd/containerd.sock
     # NOTE: This might need to be set if you have more than one active NIC on your hosts
     devices:
-      - eth0
+      - end0
     l7Proxy: true
     endpointRoutes:
       enabled: true

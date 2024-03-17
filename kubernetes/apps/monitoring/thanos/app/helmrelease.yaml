@@ -25,31 +25,31 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: openebs
-      namespace: openebs-system
-    - name: redis
-      namespace: database
+  - name: openebs
+    namespace: openebs-system
+  - name: redis
+    namespace: database
   valuesFrom:
-    - targetPath: objstoreConfig.config.bucket
-      kind: Secret
-      name: thanos-bucket-v2
-      valuesKey: BUCKET_NAME
-    - targetPath: objstoreConfig.config.endpoint
-      kind: Secret
-      name: thanos-bucket-v2
-      valuesKey: BUCKET_HOST
-    - targetPath: objstoreConfig.config.region
-      kind: Secret
-      name: thanos-bucket-v2
-      valuesKey: BUCKET_REGION
-    - targetPath: objstoreConfig.config.access_key
-      kind: Secret
-      name: thanos-bucket-v2
-      valuesKey: AWS_ACCESS_KEY_ID
-    - targetPath: objstoreConfig.config.secret_key
-      kind: Secret
-      name: thanos-bucket-v2
-      valuesKey: AWS_SECRET_ACCESS_KEY
+  - targetPath: objstoreConfig.config.bucket
+    kind: Secret
+    name: thanos-bucket-v2
+    valuesKey: BUCKET_NAME
+  - targetPath: objstoreConfig.config.endpoint
+    kind: Secret
+    name: thanos-bucket-v2
+    valuesKey: BUCKET_HOST
+  - targetPath: objstoreConfig.config.region
+    kind: Secret
+    name: thanos-bucket-v2
+    valuesKey: BUCKET_REGION
+  - targetPath: objstoreConfig.config.access_key
+    kind: Secret
+    name: thanos-bucket-v2
+    valuesKey: AWS_ACCESS_KEY_ID
+  - targetPath: objstoreConfig.config.secret_key
+    kind: Secret
+    name: thanos-bucket-v2
+    valuesKey: AWS_SECRET_ACCESS_KEY
   values:
     image:
       registry: quay.io
@@ -79,8 +79,8 @@ spec:
         hostname: &host thanos-query-frontend.chalk-ho.me
         tls: true
         extraTls:
-          - hosts:
-              - *host
+        - hosts:
+          - *host
       networkPolicy:
         enabled: false
     query:
@@ -101,8 +101,8 @@ spec:
     compactor:
       enabled: true
       extraFlags:
-        - --compact.concurrency=4
-        - --delete-delay=30m
+      - --compact.concurrency=4
+      - --delete-delay=30m
       retentionResolutionRaw: 14d
       retentionResolution5m: 30d
       retentionResolution1h: 60d
