@@ -1,4 +1,21 @@
 ---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: &app external-secrets-crds
+  namespace: flux-system
+spec:
+  targetNamespace: external-secrets
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 10m
+  path: ./deploy/crds
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: external-secrets
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -11,7 +28,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword-connect
+  - name: onepassword-connect
   path: ./kubernetes/apps/external-secrets/external-secrets/app
   prune: true
   sourceRef:
@@ -34,7 +51,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets
+  - name: external-secrets-crds
   path: ./kubernetes/apps/external-secrets/external-secrets/stores
   prune: true
   sourceRef:
