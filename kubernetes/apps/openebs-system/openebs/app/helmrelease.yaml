@@ -30,5 +30,5 @@ spec:
       hostpathClass:
         enabled: true
         name: openebs-hostpath
-        isDefaultClass: false
-        basePath: /var/openebs/local
+        path: /mnt/data/openebs
+        isDefault: false
