@@ -20,11 +20,11 @@ spec:
     name: alert-manager
   eventSeverity: error
   eventSources:
-    - kind: HelmRelease
-      name: "*"
+  - kind: HelmRelease
+    name: "*"
   exclusionList:
-    - "error.*lookup github\\.com"
-    - "error.*lookup raw\\.githubusercontent\\.com"
-    - "dial.*tcp.*timeout"
-    - "waiting.*socket"
+  - "error.*lookup github\\.com"
+  - "error.*lookup raw\\.githubusercontent\\.com"
+  - "dial.*tcp.*timeout"
+  - "waiting.*socket"
   suspend: false
