@@ -82,7 +82,7 @@ spec:
         clusterPoolIPv4PodCIDRList:
         - "${POD_CIDR}"
         clusterPoolIPv4MaskSize: 24
-    ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
+    ipv4NativeRoutingCIDR: "${SERVICE_CIDR}"
     k8sServiceHost: 127.0.0.1
     k8sServicePort: 6444
     kubeProxyReplacement: true

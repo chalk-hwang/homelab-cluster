@@ -27,7 +27,6 @@ spec:
     ttl: 1
     service:
       type: LoadBalancer
-      port: 54
       useTcp: true
       loadBalancerIP: 10.10.0.1
       annotations:
