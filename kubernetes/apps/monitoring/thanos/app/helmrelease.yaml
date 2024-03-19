@@ -60,7 +60,7 @@ spec:
         type: REDIS
         config:
           addr: >-
-            redis-node-0.redis-headless.database.svc.cluster.local:26379
+            redis.database.svc.cluster.local:6379
           db: 13
           master_name: redis-master
       ingress:
