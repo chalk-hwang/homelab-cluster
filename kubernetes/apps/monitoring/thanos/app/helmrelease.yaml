@@ -30,25 +30,13 @@ spec:
   - name: redis
     namespace: database
   valuesFrom:
-  - targetPath: objstoreConfig.config.bucket
-    kind: Secret
-    name: thanos-bucket-v2
-    valuesKey: BUCKET_NAME
-  - targetPath: objstoreConfig.config.endpoint
-    kind: Secret
-    name: thanos-bucket-v2
-    valuesKey: BUCKET_HOST
-  - targetPath: objstoreConfig.config.region
-    kind: Secret
-    name: thanos-bucket-v2
-    valuesKey: BUCKET_REGION
   - targetPath: objstoreConfig.config.access_key
     kind: Secret
-    name: thanos-bucket-v2
+    name: thanos-secret
     valuesKey: AWS_ACCESS_KEY_ID
   - targetPath: objstoreConfig.config.secret_key
     kind: Secret
-    name: thanos-bucket-v2
+    name: thanos-secret
     valuesKey: AWS_SECRET_ACCESS_KEY
   values:
     image:
@@ -59,6 +47,8 @@ spec:
       type: s3
       config:
         insecure: true
+        bucket: thanos
+        endpoint: http://10.10.0.2
     receive:
       enabled: false
       networkPolicy:
