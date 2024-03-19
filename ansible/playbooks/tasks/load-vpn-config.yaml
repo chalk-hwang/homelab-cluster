@@ -9,9 +9,9 @@
 - name: Tailscale | Set default variables
   ansible.builtin.set_fact:
     tailscale_authkey: "{{ tailscale_oauth_secret.stdout }}"
-    tailscale_args: "--ssh --advertise-exit-node --accept-routes=false --accept-dns=false"
+    tailscale_args: "--ssh --advertise-exit-node --advertise-routes=10.0.7.0/24,10.10.0.0/15,10.12.0.0/15 --accept-routes=true --accept-dns=false"
     tailscale_tags:
-      - "metal"
+    - "metal"
     # Optionally, also include:
     tailscale_oauth_ephemeral: false
     tailscale_oauth_preauthorized: true
