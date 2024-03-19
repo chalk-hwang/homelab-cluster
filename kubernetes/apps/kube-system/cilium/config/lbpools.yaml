@@ -5,4 +5,4 @@ metadata:
   name: pool
 spec:
   cidrs:
-    - cidr: "${BGP_ADVERTISED_CIDR}"
+  - cidr: "${BGP_ADVERTISED_CIDR}"
