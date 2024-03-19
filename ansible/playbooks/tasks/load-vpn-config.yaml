@@ -9,7 +9,7 @@
 - name: Tailscale | Set default variables
   ansible.builtin.set_fact:
     tailscale_authkey: "{{ tailscale_oauth_secret.stdout }}"
-    tailscale_args: "--ssh --advertise-exit-node --advertise-routes=10.0.7.0/24,10.10.0.0/15,10.12.0.0/15 --snat-subnet-routes=false --accept-routes --accept-dns=false"
+    tailscale_args: "--ssh --advertise-exit-node --advertise-routes=10.0.7.0/24,10.12.0.0/16 --snat-subnet-routes --accept-routes --accept-dns=false"
     tailscale_tags:
     - "metal"
     # Optionally, also include:
