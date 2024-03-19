@@ -34,7 +34,8 @@ tasks:
         path: Path under apps containing the Flux Kustomization resource (ks.yaml) (required)
         ns: Namespace the Flux Kustomization exists in (default: flux-system)
     cmd: |
-      flux --kubeconfig {{.KUBECONFIG_FILE}} build ks $(basename {{.path}}) \
+      flux --kubeconfig {{.KUBECONFIG_FILE}} build ks \
+          {{ if .name }}{{.name}}{{ else }}$(basename {{.path}}){{ end }} \
           --namespace {{.ns}} \
           --kustomization-file {{.KUBERNETES_DIR}}/apps/{{.path}}/ks.yaml \
           --path {{.KUBERNETES_DIR}}/apps/{{.path}} \
@@ -45,6 +46,7 @@ tasks:
     requires:
       vars: ["path"]
     vars:
+      name: '{{.name}}'
       ns: '{{.ns | default "flux-system"}}'
       ks:
         sh: flux --kubeconfig {{.KUBECONFIG_FILE}} --namespace {{.ns}} get kustomizations $(basename {{.path}}) 2>&1
