@@ -29,8 +29,8 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs-system
-    - name: thanos
-      namespace: monitoring
+    # - name: thanos
+    #   namespace: monitoring
   values:
     crds:
       enabled: true
@@ -101,10 +101,10 @@ spec:
         tls:
           - hosts:
               - *host
-      thanosService:
-        enabled: true
-      thanosServiceMonitor:
-        enabled: true
+      # thanosService:
+      #   enabled: true
+      # thanosServiceMonitor:
+      #   enabled: true
       prometheusSpec:
         replicas: 2
         replicaExternalLabelName: __replica__
@@ -120,13 +120,13 @@ spec:
           - auto-gomaxprocs
           - memory-snapshot-on-shutdown
           - new-service-discovery-manager
-        thanos:
-          image: quay.io/thanos/thanos:${THANOS_VERSION}
-          version: "${THANOS_VERSION#v}"
-          objectStorageConfig:
-            existingSecret:
-              name: thanos-objstore-secret
-              key: objstore.yml
+        # thanos:
+        #   image: quay.io/thanos/thanos:${THANOS_VERSION}
+        #   version: "${THANOS_VERSION#v}"
+        #   objectStorageConfig:
+        #     existingSecret:
+        #       name: thanos-objstore-secret
+        #       key: objstore.yml
         retention: 2d
         retentionSize: 15GB
         externalLabels:
