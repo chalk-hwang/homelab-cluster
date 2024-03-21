@@ -1,0 +1,177 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: home-assistant
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+    timeout: 10m
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+    timeout: 10m
+  uninstall:
+    keepHistory: false
+  values:
+    image:
+      repository: ghcr.io/home-assistant/home-assistant
+      tag: 2024.3.1
+
+    initContainers:
+      init-db:
+        image: ghcr.io/onedr0p/postgres-initdb:14.8
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - secretRef:
+            name: home-assistant-secret
+      hacs:
+        image: alpine:3.16.2
+        command:
+          [
+            "sh",
+            "-c",
+            "if [ ! -d /config ]; then mkdir -p /config; fi; if [ -f /config/configuration.yaml ]; then if [ ! -f /config/.hacs-installed ]; then apk add bash wget && wget -O - https://get.hacs.xyz | bash - && touch /config/.hacs-installed; fi; else echo 'No Home Assistant database found. Skipping HACS installation.'; fi",
+          ]
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+
+    env:
+      TZ: "America/New_York"
+
+    envFrom:
+    - secretRef:
+        name: home-assistant-secret
+
+    # required for mDNS and other host network features
+    hostNetwork: true
+
+    dnsPolicy: ClusterFirstWithHostNet
+
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: 10.0.6.56
+        ports:
+          http:
+            port: 8123
+
+    ingress:
+      main:
+        enabled: true
+        # ensure that external DNS (cloudflare) has an entry for this directed to the router
+        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
+        ingressClassName: nginx
+        hosts:
+        - host: &host hass.eviljungle.com
+          paths:
+          - path: /
+        tls:
+        - hosts:
+          - *host
+      tailscale:
+        enabled: true
+        ingressClassName: nginx-tailscale
+        hosts:
+        - host: *host
+          paths:
+          - path: /
+            pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    probes:
+      liveness:
+        enabled: false
+      readiness:
+        enabled: false
+      startup:
+        enabled: true
+
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+
+    persistence:
+      config:
+        enabled: true
+        storageClass: "rook-ceph-block"
+        accessMode: ReadWriteOnce
+        size: "10Gi"
+      hass-gcp-sa-json:
+        enabled: true
+        type: secret
+        name: home-assistant-gcp-sa-secret
+        subPath: home-assistant-4d8d1f2ca10f.json
+        mountPath: /config/home-assistant-4d8d1f2ca10f.json
+        readOnly: true
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512M
+      limits:
+        memory: 2048M
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: codercom/code-server
+          tag: 4.22.1
+        workingDir: "/config"
+        args:
+          - --user-data-dir
+          - "/config/.vscode"
+          - --extensions-dir
+          - "/config/.vscode"
+          - --auth
+          - "none"
+        env:
+          TZ: America/New_York
+          HASS_SERVER: http://localhost:8123
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          fsGroupChangePolicy: "OnRootMismatch"
+        ingress:
+          enabled: true
+          ingressClassName: nginx-tailscale
+          hosts:
+            - host: hass-vscode.eviljungle.com
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - hass-vscode.eviljungle.com
+        volumeMounts:
+        - name: config
+          mountPath: /config

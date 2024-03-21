@@ -9,10 +9,10 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: postgres
-      port: 5432
-      protocol: TCP
-      targetPort: 5432
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
   selector:
     cnpg.io/cluster: postgres16
     role: primary

@@ -18,9 +18,18 @@
     // TODO: https://github.com/PKief/vscode-material-icon-theme/issues/330
     "*.secret.sops.env": "lock",
     "*.secret.sops.yaml": "lock",
-    "kustomization.yaml": "kubernetes"
+    "externalsecret.yaml": "document",
+    "kustomization.yaml": "kubernetes",
+    "ks.yaml": "azure-pipelines",
+    "*.helmchart.yaml": "helm",
+    "helmrelease.yaml": "helm",
+    "*.helmrelease.yaml": "helm",
+    "values.yaml": "document",
+    "service.yaml": "capacitor",
+    "ingress.yaml": "routing",
+    "prometheusrule.yaml": "log"
   },
-  "material-icon-theme.folders.theme": "classic",
+  // "material-icon-theme.folders.theme": "classic",
   "material-icon-theme.folders.associations": {
     // top level
     ".archive": "archive",
@@ -33,7 +42,7 @@
     "default": "home",
     "digester-system": "hook",
     "onepassword-connect": "secure",
-    "argocd": "ci",
+    "kubernetes/flux": "ci",
     "kube-system": "kubernetes",
     "monitoring": "event",
     "network": "connection",
@@ -47,13 +56,27 @@
     "apps": "app",
     "ansible": "ansible",
     "database": "database",
-    "ecosystem": "home",
+    "home-iot": "home",
     "containers": "container",
     ".taskfiles": "tasks",
     "base": "base",
     "overlay": "custom",
     "containers/argocd": "",
-    "certificates": "private"
+    "certificates": "private",
+     // top level
+     "external-secrets": "secure",
+     "onepassword": "secure",
+     "tailscale": "",
+     "flux": "azure-pipelines",
+     "tools": "tools",
+     "config": "config",
+     "app": "src",
+     "notifications": "messages",
+     "webhooks": "hook",
+     "repositories": "resource",
+     "git": "git",
+     "external-secrets/stores": "cart",
+     "bootstrap": ""
   },
   "sops.defaults.ageKeyFile": "age.key",
   "vs-kubernetes": {
@@ -67,7 +90,14 @@
     "ansible": "./ansible/**/*.yaml",
     "kubernetes": "./kubernetes/**/*.yaml",
     "https://json.schemastore.org/kustomization": "kustomization.yaml",
-    "https://kubernetes-schemas.pages.dev/external-secrets.io/externalsecret_v1beta1.json": "externalsecret.yaml"
+    "https://kubernetes-schemas.pages.dev/external-secrets.io/externalsecret_v1beta1.json": "externalsecret.yaml",
+    "https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json": "ks.yaml",
+    "https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2beta2.json": "helmrelease.yaml",
+    "https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json": "prometheusrule.yaml",
+    "https://kubernetes-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json": "podmonitor.yaml",
+    "https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/gitrepository_v1.json": "flux/repositories/git/*.yaml",
+    "https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1beta2.json": "flux/repositories/helm/*.yaml",
+    "https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json": "flux/repositories/oci/*.yaml"
   },
   "workbench.editor.labelFormat": "medium",
   "ansible.ansible.reuseTerminal": true
