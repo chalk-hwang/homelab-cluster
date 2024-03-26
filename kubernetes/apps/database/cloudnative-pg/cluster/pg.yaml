@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: pg16
+  name: pg
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:16.2-6
@@ -43,7 +43,7 @@ spec:
       destinationPath: s3://cloudnative-pg/
       endpointURL: 10.10.0.2
       # Note: serverName version needs to be inclemented
-      serverName: &currentCluster pg16-v1
+      serverName: &currentCluster pg-v
       # when recovering from an existing cnpg cluster
       s3Credentials:
         accessKeyId:
@@ -55,8 +55,11 @@ spec:
   # Note: previousCluster needs to be set to the name of the previous
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
-    initdb:
-      database: app
-      owner: app
-      secret:
-        name: cloudnative-pg-secret
+    recovery:
+      source: &previousCluster pg-backup
+  # Note: externalClusters is needed when recovering from an existing cnpg cluster
+  externalClusters:
+  - name: *previousCluster
+    barmanObjectStore:
+      <<: *barmanObjectStore
+      serverName: *previousCluster

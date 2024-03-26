@@ -28,6 +28,7 @@ spec:
       deviceClass:
         enabled: true
         name: openebs-external
+        isDefault: false
       hostpathClass:
         enabled: true
         name: openebs-hostpath

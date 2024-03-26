@@ -145,7 +145,7 @@ spec:
     read:
       replicas: 2
       persistence:
-        storageClass: openebs-hostpath
+        storageClass: openebs-local
       extraVolumeMounts:
         - name: rules
           mountPath: /rules
@@ -155,11 +155,11 @@ spec:
     write:
       replicas: 2
       persistence:
-        storageClass: openebs-hostpath
+        storageClass: openebs-local
     backend:
       replicas: 2
       persistence:
-        storageClass: openebs-hostpath
+        storageClass: openebs-local
       extraVolumeMounts:
         - name: rules
           mountPath: /rules/fake
