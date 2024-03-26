@@ -35,7 +35,6 @@ spec:
 
     env:
       TZ: Asia/Seoul
-      MINIO_UPDATE: "off"
       MINIO_PROMETHEUS_URL: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
       MINIO_PROMETHEUS_JOB_ID: minio
       MINIO_PROMETHEUS_AUTH_TYPE: public
@@ -56,16 +55,16 @@ spec:
             port: &api-port 9000
     args:
     - server
-    - /data
+    - /minio
     - --console-address
     - :9001
 
     persistence:
       config:
         enabled: true
-        storageClass: "openebs-hostpath"
+        storageClass: openebs-hostpath
         size: "300Gi"
-        mountPath: /data
+        mountPath: /minio
 
     ingress:
       main:
