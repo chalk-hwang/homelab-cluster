@@ -3,7 +3,7 @@
 Thumbs.db
 # k8s
 kubeconfig
-*.secret.yaml
+.decrypted~*.yaml
 .config.env
 *.agekey
 *.pub

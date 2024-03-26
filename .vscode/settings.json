@@ -24,7 +24,7 @@
     "*.helmchart.yaml": "helm",
     "helmrelease.yaml": "helm",
     "*.helmrelease.yaml": "helm",
-    "values.yaml": "document",
+    "values.yaml": "helm",
     "service.yaml": "capacitor",
     "ingress.yaml": "routing",
     "prometheusrule.yaml": "log"
