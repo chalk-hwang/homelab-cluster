@@ -110,7 +110,7 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "openebs-hostpath"
+        storageClass: "openebs-local"
         size: "10Gi"
 
     resources:

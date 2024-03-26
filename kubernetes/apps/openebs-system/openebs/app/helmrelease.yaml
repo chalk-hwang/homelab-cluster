@@ -22,13 +22,14 @@ spec:
       retries: 3
   values:
     ndm:
-      enabled: false
+      enabled: true
     localprovisioner:
       enabled: true
       deviceClass:
-        enabled: false
+        enabled: true
+        name: openebs-ext
       hostpathClass:
         enabled: true
-        name: openebs-hostpath
+        name: openebs-local
         path: /var/openebs/local
         isDefault: false
