@@ -145,7 +145,7 @@ spec:
           fsGroupChangePolicy: "OnRootMismatch"
         ingress:
           enabled: true
-          ingressClassName: nginx-tailscale
+          ingressClassName: internal
           hosts:
           - host: hass-vscode.chalk-ho.me
             paths:
