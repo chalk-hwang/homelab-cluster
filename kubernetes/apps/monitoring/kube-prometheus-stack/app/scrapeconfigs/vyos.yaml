@@ -6,7 +6,7 @@ metadata:
   name: vyos-gatus
 spec:
   staticConfigs:
-    - targets: ["status.turbo.ac"]
+    - targets: ["status.chalk-ho.me"]
   metricsPath: /metrics
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/scrapeconfig_v1alpha1.json
@@ -26,5 +26,5 @@ spec:
 #   name: vyos-vnstat
 # spec:
 #   staticConfigs:
-#     - targets: ["vyos.turbo.ac:8685"]
+#     - targets: ["vyos.chalk-ho.me:8685"]
 #   metricsPath: /metrics

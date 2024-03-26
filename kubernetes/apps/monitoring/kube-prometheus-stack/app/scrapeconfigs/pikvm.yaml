@@ -6,5 +6,5 @@ metadata:
   name: pikvm
 spec:
   staticConfigs:
-    - targets: ["pikvm.turbo.ac"]
+    - targets: ["pikvm.chalk-ho.me"]
   metricsPath: /api/export/prometheus/metrics

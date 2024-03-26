@@ -6,5 +6,5 @@ metadata:
   name: zigbee-controller
 spec:
   staticConfigs:
-    - targets: ["zigbee-controller.turbo.ac"]
+    - targets: ["zigbee-controller.chalk-ho.me"]
   metricsPath: /metrics

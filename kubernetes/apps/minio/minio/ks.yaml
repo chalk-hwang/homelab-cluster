@@ -6,19 +6,16 @@ metadata:
   name: &app minio
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: minio
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-  - name: cert-manager-issuers
-  - name: external-secrets-stores
   path: ./kubernetes/apps/minio/minio/app
   prune: true
   sourceRef:
     kind: GitRepository
-    name: homelab
-  wait: true
+    name: home-kubernetes
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m

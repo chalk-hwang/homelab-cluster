@@ -1,5 +1,6 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: minio
@@ -8,99 +9,105 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
   install:
-    createNamespace: true
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    image:
-      repository: quay.io/minio/minio
-      tag: RELEASE.2024-03-21T23-13-43Z
-
-    controller:
-      annotations:
-        reloader.stakater.com/auto: "true"
-
-    env:
-      TZ: Asia/Seoul
-      MINIO_PROMETHEUS_URL: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
-      MINIO_PROMETHEUS_JOB_ID: minio
-      MINIO_PROMETHEUS_AUTH_TYPE: public
-      MINIO_BROWSER_REDIRECT_URL: https://minio.chalk-ho.me
-      MINIO_SERVER_URL: https://s3.chalk-ho.me
-      MINIO_API_CORS_ALLOW_ORIGIN: https://minio.chalk-ho.me,https://s3.chalk-ho.me
-    envFrom:
-    - secretRef:
-        name: minio-secret
-
+    controllers:
+      minio:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: quay.io/minio/minio
+              tag: RELEASE.2024-03-21T23-13-43Z@sha256:a440ee22d5cf62285a3181c6c63e26e9a0e6e4854e533841deabf229561571d3
+            env:
+              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.chalk-ho.me,https://s3.chalk-ho.me
+              MINIO_BROWSER_REDIRECT_URL: https://minio.chalk-ho.me
+              MINIO_PROMETHEUS_JOB_ID: minio
+              MINIO_PROMETHEUS_URL: https://prometheus.chalk-ho.me
+              MINIO_PROMETHEUS_AUTH_TYPE: public
+              MINIO_SERVER_URL: https://s3.chalk-ho.me
+              MINIO_UPDATE: "off"
+            envFrom:
+              - secretRef:
+                  name: minio-secret
+            args:
+              - server
+              - /data
+              - --console-address
+              - :9001
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /minio/health/live
+                    port: 9000
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 6
+              readiness: *probes
+              startup:
+                enabled: false
+            securityContext:
+              runAsUser: 568
+              runAsGroup: 568
+              fsGroup: 568
+              fsGroupChangePolicy: OnRootMismatch
+              supplementalGroups: [100]
     service:
-      main:
+      app:
+        controller: minio
         ports:
           http:
-            port: &console-port 9001
-          api:
-            enabled: true
-            port: &api-port 9000
-    args:
-    - server
-    - /minio
-    - --console-address
-    - :9001
-
-    persistence:
-      config:
-        enabled: true
-        storageClass: openebs-hostpath
-        size: "300Gi"
-        mountPath: /minio
-
-    ingress:
-      main:
-        enabled: true
-        primary: true
-        ingressClassName: internal
-        hosts:
-        - host: &host minio.chalk-ho.me
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              port: *console-port
-        tls:
-        - hosts:
-          - *host
-      s3:
-        enabled: true
-        ingressClassName: internal
-        hosts:
-        - host: &s3host s3.chalk-ho.me
-          paths:
-          - path: /
-            pathType: Prefix
-            service:
-              port: *api-port
-        tls:
-        - hosts:
-          - *s3host
-
+            port: 9001
+          s3:
+            port: 9000
     serviceMonitor:
-      main:
-        enabled: true
+      app:
+        serviceName: minio
         endpoints:
-        - port: api
+        - port: s3
           scheme: http
           path: /minio/v2/metrics/cluster
           interval: 1m
           scrapeTimeout: 10s
+    ingress:
+      app:
+        className: internal
+        hosts:
+        - host: &host "{{ .Release.Name }}.chalk-ho.me"
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
+        - host: &s3Host s3.chalk-ho.me
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: s3
+        tls:
+        - hosts: [*host, *s3Host]
+
+    persistence:
+      config:
+        storageClass: openebs-hostpath
+        size: 300Gi
+        globalMounts:
+        - path: /data
