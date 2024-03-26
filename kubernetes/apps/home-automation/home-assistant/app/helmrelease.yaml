@@ -60,7 +60,7 @@ spec:
           name: config-volume
 
     env:
-      TZ: "America/New_York"
+      TZ: "Asia/Seoul"
 
     envFrom:
     - secretRef:
@@ -74,7 +74,7 @@ spec:
     service:
       main:
         type: LoadBalancer
-        loadBalancerIP: 10.0.6.56
+        loadBalancerIP: 10.10.0.100
         ports:
           http:
             port: 8123
@@ -154,7 +154,7 @@ spec:
           enabled: true
           ingressClassName: nginx-tailscale
           hosts:
-          - host: hass-vscode.eviljungle.com
+          - host: hass-vscode.chalk-ho.me
             paths:
             - path: /
               pathType: Prefix
