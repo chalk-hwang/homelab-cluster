@@ -55,7 +55,7 @@ spec:
       create: true
     service:
       create: true
-  valuesFrom:
+  # valuesFrom:
   # - targetPath: configuration.notifyUrl
   #   kind: Secret
   #   name: kured-secret
