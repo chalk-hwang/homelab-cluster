@@ -63,8 +63,8 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "openebs-external"
-        size: "900Gi"
+        storageClass: "openebs-hostpath"
+        size: "300Gi"
         mountPath: /data
 
     ingress:
