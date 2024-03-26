@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
+  - name: external-secrets-stores
   path: ./kubernetes/apps/database/cloudnative-pg/app
   prune: true
   sourceRef:
@@ -35,6 +35,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
   - name: cloudnative-pg
+  - name: minio
   path: ./kubernetes/apps/database/cloudnative-pg/clusters
   prune: true
   sourceRef:
