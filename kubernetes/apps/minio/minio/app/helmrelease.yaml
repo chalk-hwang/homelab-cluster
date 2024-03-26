@@ -63,7 +63,7 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "openebs-device"
+        storageClass: "openebs-external"
         size: "900Gi"
         mountPath: /data
 
