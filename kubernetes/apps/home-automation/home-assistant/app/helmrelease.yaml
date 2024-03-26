@@ -111,7 +111,6 @@ spec:
       config:
         enabled: true
         storageClass: "openebs-hostpath"
-        accessMode: ReadWriteOnce
         size: "10Gi"
 
     resources:
