@@ -73,35 +73,35 @@ spec:
         primary: true
         ingressClassName: internal
         hosts:
-          - host: &host minio.chalk-ho.me
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  port: *console-port
+        - host: &host minio.chalk-ho.me
+          paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: *console-port
         tls:
-          - hosts:
-            - *host
+        - hosts:
+          - *host
       s3:
         enabled: true
         ingressClassName: internal
         hosts:
-          - host: &s3host s3.chalk-ho.me
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  port: *api-port
+        - host: &s3host s3.chalk-ho.me
+          paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: *api-port
         tls:
-          - hosts:
-            - *s3host
+        - hosts:
+          - *s3host
 
     serviceMonitor:
       main:
         enabled: true
         endpoints:
-          - port: api
-            scheme: http
-            path: /minio/v2/metrics/cluster
-            interval: 1m
-            scrapeTimeout: 10s
+        - port: api
+          scheme: http
+          path: /minio/v2/metrics/cluster
+          interval: 1m
+          scrapeTimeout: 10s
