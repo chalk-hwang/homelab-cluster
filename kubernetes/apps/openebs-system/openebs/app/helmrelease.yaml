@@ -27,9 +27,9 @@ spec:
       enabled: true
       deviceClass:
         enabled: true
-        name: openebs-ext
+        name: openebs-external
       hostpathClass:
         enabled: true
-        name: openebs-local
+        name: openebs-hostpath
         path: /var/openebs/local
         isDefault: false
