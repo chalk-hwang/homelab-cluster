@@ -41,9 +41,9 @@ spec:
         compression: bzip2
         maxParallel: 2
       destinationPath: s3://cloudnative-pg/
-      endpointURL: 10.10.0.2
+      endpointURL: http://minio.minio.svc.cluster.local:9000
       # Note: serverName version needs to be inclemented
-      serverName: &currentCluster pg-v
+      serverName: &currentCluster pgsql-v1
       # when recovering from an existing cnpg cluster
       s3Credentials:
         accessKeyId:
@@ -56,7 +56,7 @@ spec:
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
     recovery:
-      source: &previousCluster pg-backup
+      source: &previousCluster pgsql-backup
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
   - name: *previousCluster
