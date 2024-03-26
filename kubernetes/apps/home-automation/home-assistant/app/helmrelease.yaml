@@ -84,25 +84,14 @@ spec:
         enabled: true
         # ensure that external DNS (cloudflare) has an entry for this directed to the router
         # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
-        ingressClassName: nginx
+        ingressClassName: external
         hosts:
-        - host: &host hass.eviljungle.com
+        - host: &host hass.chalk-ho.me
           paths:
           - path: /
         tls:
         - hosts:
           - *host
-      tailscale:
-        enabled: true
-        ingressClassName: nginx-tailscale
-        hosts:
-        - host: *host
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-          - hosts:
-              - *host
 
     probes:
       liveness:
@@ -121,7 +110,7 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: "rook-ceph-block"
+        storageClass: "openebs-hostpath"
         accessMode: ReadWriteOnce
         size: "10Gi"
       hass-gcp-sa-json:
@@ -147,14 +136,14 @@ spec:
           tag: 4.22.1
         workingDir: "/config"
         args:
-          - --user-data-dir
-          - "/config/.vscode"
-          - --extensions-dir
-          - "/config/.vscode"
-          - --auth
-          - "none"
+        - --user-data-dir
+        - "/config/.vscode"
+        - --extensions-dir
+        - "/config/.vscode"
+        - --auth
+        - "none"
         env:
-          TZ: America/New_York
+          TZ: Asia/Seoul
           HASS_SERVER: http://localhost:8123
         securityContext:
           runAsUser: 1000
@@ -165,13 +154,13 @@ spec:
           enabled: true
           ingressClassName: nginx-tailscale
           hosts:
-            - host: hass-vscode.eviljungle.com
-              paths:
-                - path: /
-                  pathType: Prefix
+          - host: hass-vscode.eviljungle.com
+            paths:
+            - path: /
+              pathType: Prefix
           tls:
-            - hosts:
-                - hass-vscode.eviljungle.com
+          - hosts:
+            - hass-vscode.chalk-ho.me
         volumeMounts:
         - name: config
           mountPath: /config
