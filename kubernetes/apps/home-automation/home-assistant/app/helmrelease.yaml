@@ -56,7 +56,9 @@ spec:
               TZ: Asia/Seoul
               HASS_HTTP_TRUSTED_PROXY_1: 100.64.0.0/10
               HASS_HTTP_TRUSTED_PROXY_2: 10.12.0.0/16
-
+            envFrom:
+            - secretRef:
+                name: home-assistant-secret
 
           # Configure the code-server sidecar
           code:
