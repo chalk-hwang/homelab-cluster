@@ -61,4 +61,4 @@ spec:
       database: app
       owner: app
       secret:
-        name: cloudnative-pg-secret
+        name: app-secret
