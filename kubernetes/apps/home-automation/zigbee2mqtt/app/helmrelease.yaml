@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.0.4
+      version: 3.0.5
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -34,9 +34,9 @@ spec:
           app:
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
-              tag: 1.36.0@sha256:4de1ee53d67a9b4556045c34a2722bfd2348dabbefcb792e862643104d3e9fd0
+              tag: 1.36.0
             env:
-              TZ: America/New_York
+              TZ: Asia/Seoul
               ZIGBEE2MQTT_DATA: /config
               ZIGBEE2MQTT_CONFIG_ADVANCED_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
               ZIGBEE2MQTT_CONFIG_ADVANCED_HOMEASSISTANT_LEGACY_ENTITY_ATTRIBUTES: "false"
@@ -58,7 +58,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: "true"
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: "true"
-              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.default.svc.cluster.local
+              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.home-automation.svc.cluster.local
               ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: "false"
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
@@ -110,7 +110,7 @@ spec:
       config:
         storageClass: openebs-hostpath
         size: 1Gi
-        accessMode: ReadWriteMany
+        accessMode: ReadWriteOnce
       usb:
         type: hostPath
         hostPath: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20230829151350-if00
