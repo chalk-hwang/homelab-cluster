@@ -43,11 +43,8 @@ spec:
         maxParallel: 2
       destinationPath: s3://cloudnative-pg/
       endpointURL: http://10.0.10.2
-      # Note: serverName version needs to be inclemented
-      serverName: &currentCluster pg16-v1
       # when recovering from an existing cnpg cluster
       s3Credentials:
-
         accessKeyId:
           name: cloudnative-pg-secret
           key: aws-access-key-id
