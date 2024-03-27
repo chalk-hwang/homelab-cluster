@@ -93,8 +93,9 @@ spec:
           - hosts: [*host]
     persistence:
       config:
+        enabled: true
         storageClass: openebs-hostpath
-        size: 20GiB
+        size: 20Gi
         accessMode: ReadWriteOnce
         globalMounts:
         - path: /config
