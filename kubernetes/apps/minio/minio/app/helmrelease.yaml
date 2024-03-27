@@ -41,13 +41,13 @@ spec:
               MINIO_SERVER_URL: https://s3.chalk-ho.me
               MINIO_UPDATE: "off"
             envFrom:
-              - secretRef:
-                  name: minio-secret
+            - secretRef:
+                name: minio-secret
             args:
-              - server
-              - /data
-              - --console-address
-              - :9001
+            - server
+            - /data
+            - --console-address
+            - :9001
             probes:
               liveness: &probes
                 enabled: true
@@ -63,12 +63,6 @@ spec:
               readiness: *probes
               startup:
                 enabled: false
-            securityContext:
-              runAsUser: 568
-              runAsGroup: 568
-              fsGroup: 568
-              fsGroupChangePolicy: OnRootMismatch
-              supplementalGroups: [100]
     service:
       app:
         controller: minio
