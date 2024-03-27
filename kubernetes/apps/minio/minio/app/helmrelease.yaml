@@ -101,6 +101,7 @@ spec:
 
     persistence:
       config:
+        accessMode: ReadWriteOnce
         storageClass: openebs-hostpath
         size: 300Gi
         globalMounts:
