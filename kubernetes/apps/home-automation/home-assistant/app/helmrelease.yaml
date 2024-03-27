@@ -69,7 +69,9 @@ spec:
               HASS_HTTP_TRUSTED_PROXY_4: 10.2.0.0/16
             envFrom:
             - secretRef:
-                name: home-assistant-secret
+                name: home-assistant-
+            securityContext:
+              hostNetwork: true
 
           # Configure the code-server sidecar
           code:
