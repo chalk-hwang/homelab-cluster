@@ -25,7 +25,7 @@ spec:
     requests:
       cpu: 500m
     limits:
-      memory: 4Gi
+      memory: 2Gi
   monitoring:
     enablePodMonitor: true
     # Ref: https://github.com/cloudnative-pg/cloudnative-pg/issues/2501
@@ -42,7 +42,7 @@ spec:
         compression: bzip2
         maxParallel: 2
       destinationPath: s3://cloudnative-pg/
-      endpointURL: http://10.0.10.2:80
+      endpointURL: http://minio.minio.svc.cluster.local:80
             # when recovering from an existing cnpg cluster
       serverName: &currentCluster postgres-v1
       # when recovering from an existing cnpg cluster
