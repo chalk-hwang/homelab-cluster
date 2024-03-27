@@ -52,6 +52,11 @@ spec:
               # -- image tag
               # this example is not automatically updated, so be sure to use the latest image
               tag: 2024.3.3
+            env:
+              TZ: Asia/Seoul
+              HASS_HTTP_TRUSTED_PROXY_1: 100.64.0.0/10
+              HASS_HTTP_TRUSTED_PROXY_2: 10.12.0.0/16
+
 
           # Configure the code-server sidecar
           code:
@@ -78,6 +83,9 @@ spec:
       main:
         controller: main
         type: ClusterIP
+        annotations:
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: "hass"
         ports:
           http:
             port: 8123
@@ -85,6 +93,9 @@ spec:
       code:
         type: ClusterIP
         controller: main
+        annotations:
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: "hass-code"
         ports:
           http:
             port: 8081
@@ -102,8 +113,8 @@ spec:
               identifier: main
               port: http
         tls:
-          - hosts:
-              - *host
+        - hosts:
+          - *host
       # Configure an Ingress for the code-server sidecar
       code:
         className: "internal"
