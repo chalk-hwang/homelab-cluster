@@ -26,7 +26,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cloudnative-pg-clusters
+  name: &app cloudnative-pg-cluster
   namespace: flux-system
 spec:
   targetNamespace: database
@@ -36,7 +36,7 @@ spec:
   dependsOn:
   - name: cloudnative-pg
   - name: minio
-  path: ./kubernetes/apps/database/cloudnative-pg/clusters
+  path: ./kubernetes/apps/database/cloudnative-pg/cluster
   prune: true
   sourceRef:
     kind: GitRepository
