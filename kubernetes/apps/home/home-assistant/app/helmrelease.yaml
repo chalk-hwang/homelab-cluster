@@ -28,8 +28,6 @@ spec:
   - name: openebs
     namespace: openebs-system
   values:
-    defaultPodOptions:
-      hostNetwork: true
     controllers:
       home-assistant:
         initContainers:
@@ -69,6 +67,8 @@ spec:
               limits:
                 memory: 1Gi
         pod:
+          hostNetwork: true
+          dnsPolicy: "ClusterFirstWithHostNet"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -76,6 +76,8 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
     service:
       app:
+        annotations:
+          io.cilium/lb-ipam-ips: 10.10.1.30
         controller: home-assistant
         ports:
           http:
@@ -84,9 +86,9 @@ spec:
       app:
         className: external
         annotations:
-          external-dns.alpha.kubernetes.io/target: external.chalk-ho.ke
+          external-dns.alpha.kubernetes.io/target: external.chalk-ho.me
         hosts:
-        - host: &host hass.chalk-ho.ke
+        - host: &host hass.chalk-ho.me
           paths:
           - path: /
             service:
