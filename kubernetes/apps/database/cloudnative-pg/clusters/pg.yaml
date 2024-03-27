@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: pg
+  name: pg16
 spec:
   instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:16.2-6
@@ -33,6 +33,7 @@ spec:
     - { sourceLabels: ["cluster"], targetLabel: cnpg_cluster, action: replace }
     - { regex: cluster, action: labeldrop }
   backup:
+
     retentionPolicy: 30d
     barmanObjectStore: &barmanObjectStore
       data:
@@ -41,11 +42,12 @@ spec:
         compression: bzip2
         maxParallel: 2
       destinationPath: s3://cloudnative-pg/
-      endpointURL: https://s3.chalk-ho.me
+      endpointURL: http://10.0.10.2
       # Note: serverName version needs to be inclemented
-      serverName: &currentCluster pg-v1
+      serverName: &currentCluster pg16-v1
       # when recovering from an existing cnpg cluster
       s3Credentials:
+
         accessKeyId:
           name: cloudnative-pg-secret
           key: aws-access-key-id
@@ -56,7 +58,7 @@ spec:
   # cluster when recovering from an existing cnpg cluster
   bootstrap:
     recovery:
-      source: &previousCluster pg-backup
+      source: &previousCluster pg16-backup
   # Note: externalClusters is needed when recovering from an existing cnpg cluster
   externalClusters:
   - name: *previousCluster
