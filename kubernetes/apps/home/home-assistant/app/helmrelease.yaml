@@ -1,37 +1,33 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: home-assistant
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-      interval: 15m
-  maxHistory: 3
+
   install:
     createNamespace: true
     remediation:
       retries: 3
-    timeout: 10m
   upgrade:
     cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 3
-    timeout: 10m
-  uninstall:
-    keepHistory: false
+  dependsOn:
+    - name: openebs
+      namespace: volsync-system
   values:
-    image:
-      repository: ghcr.io/home-assistant/home-assistant
-      tag: 2024.3.1
-
     initContainers:
       init-db:
         image: ghcr.io/onedr0p/postgres-init:16.2
@@ -39,80 +35,79 @@ spec:
         envFrom:
         - secretRef:
             name: home-assistant-secret
-      hacs:
-        image: alpine:3.16.2
-        command:
-          [
-            "sh",
-            "-c",
-            "if [ ! -d /config ]; then mkdir -p /config; fi; if [ -f /config/configuration.yaml ]; then if [ ! -f /config/.hacs-installed ]; then apk add bash wget && wget -O - https://get.hacs.xyz | bash - && touch /config/.hacs-installed; fi; else echo 'No Home Assistant database found. Skipping HACS installation.'; fi",
-          ]
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsUser: 0
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
-        volumeMounts:
-        - mountPath: /config
-          name: config
-
-    env:
-      TZ: "Asia/Seoul"
-
-    envFrom:
-    - secretRef:
-        name: home-assistant-secret
-
-    # required for mDNS and other host network features
-    hostNetwork: true
-
-    dnsPolicy: ClusterFirstWithHostNet
-
+    controllers:
+      home-assistant:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2024.3.3@sha256:a4c2b7a75e8d5168a9e9f78d9d9f7f36435e2da07899e7faf5f6e3cdc4eebe56
+            env:
+              TZ: Asia/Seoul
+              HASS_HTTP_TRUSTED_PROXY_1: 10.2.0.0/24
+              HASS_HTTP_TRUSTED_PROXY_2: 10.0.7.0/24
+              HASS_HTTP_TRUSTED_PROXY_3: 10.12.0.0/16
+              HASS_HTTP_TRUSTED_PROXY_4: 10.11.0.0/16
+              HASS_HTTP_TRUSTED_PROXY_5: 10.10.0.0/16
+              HASS_HTTP_TRUSTED_PROXY_7: 100.64.0.0/10
+            envFrom:
+              - secretRef:
+                  name: home-assistant-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            runAsNonRoot: true
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
     service:
-      main:
-        type: LoadBalancer
-        loadBalancerIP: 10.10.0.100
+      app:
+        controller: home-assistant
         ports:
           http:
             port: 8123
-
     ingress:
-      main:
-        enabled: true
-        # ensure that external DNS (cloudflare) has an entry for this directed to the router
-        # ensure that internal DNS for this zone (coredns) has an entry for this directed to nginx LB IP
-        ingressClassName: external
+      app:
+        className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: external.chalk-ho.ke
         hosts:
-        - host: &host hass.chalk-ho.me
-          paths:
-          - path: /
+          - host: &host hass.chalk-ho.ke
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
         tls:
-        - hosts:
-          - *host
-
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: true
-
-    podSecurityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
-      fsGroupChangePolicy: "OnRootMismatch"
-
+          - hosts: [*host]
     persistence:
       config:
-        enabled: true
-        storageClass: "openebs-hostpath"
-        size: "10Gi"
-
+        storageClass: openebs-hostpath
+        size: 20GiB
+        accessMode: ReadWriteOnce
+        globalMounts:
+        - path: /config
+      logs:
+        type: emptyDir
+        globalMounts:
+        - path: /config/logs
+      tts:
+        type: emptyDir
+        globalMounts:
+        - path: /config/tts
+      tmp:
+        type: emptyDir
     resources:
       requests:
         cpu: 100m
