@@ -28,7 +28,8 @@ spec:
   - name: openebs
     namespace: openebs-system
   values:
-
+    defaultPodOptions:
+      hostNetwork: true
     controllers:
       home-assistant:
         initContainers:
@@ -59,9 +60,9 @@ spec:
             - secretRef:
                 name: home-assistant-secret
             securityContext:
-              allowPrivilegeEscalation: false
+              # allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              # capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
