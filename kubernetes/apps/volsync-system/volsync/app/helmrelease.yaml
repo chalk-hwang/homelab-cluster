@@ -25,7 +25,8 @@ spec:
     keepHistory: false
   dependsOn:
     - name: snapshot-controller
-      namespace: volsync-system
+
+      namespace: volsync-systemxaxa
   values:
     manageCRDs: true
     image: &image
