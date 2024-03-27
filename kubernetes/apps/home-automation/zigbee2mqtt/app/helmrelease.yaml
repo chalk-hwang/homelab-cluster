@@ -68,7 +68,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED: "false"
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTOR: ezsp
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://192.168.1.90:6638
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20230829151350-if00
             envFrom:
             - secretRef:
                 name: zigbee2mqtt-secret
@@ -102,14 +102,24 @@ spec:
       app:
         className: internal
         hosts:
-          - host: &host zigbee2mqtt.chalk-ho.me
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        - host: &host zigbee2mqtt.chalk-ho.me
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
         tls:
-          - hosts: [*host]
+        - hosts: [*host]
     persistence:
       config:
-        existingClaim: zigbee2mqtt
+        storageClass: openebs-hostpath
+        size: 1Gi
+        accessMode: ReadWriteMany
+      usb:
+        type: hostPath
+        hostPath: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20230829151350-if00
+        hostPathType: CharDevice
+        globalMounts:
+        - path: /dev/serial/by-id/usb-ITEAD_SONOFF_Zigbee_3.0_USB_Dongle_Plus_V2_20230829151350-if00
+
+
