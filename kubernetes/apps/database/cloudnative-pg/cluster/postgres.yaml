@@ -41,8 +41,8 @@ spec:
       wal:
         compression: bzip2
         maxParallel: 2
-      destinationPath: s3://cloudnative-pg/
-      endpointURL: https://minio.minio.svc.cluster.local:443
+      destinationPath: s3://chalk-ho-me-cloudnative-pg/
+      endpointURL: https://s3.us-east-005.backblazeb2.com
             # when recovering from an existing cnpg cluster
       serverName: &currentCluster postgres-v1
       # when recovering from an existing cnpg cluster
