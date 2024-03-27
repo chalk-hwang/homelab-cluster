@@ -25,18 +25,21 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: openebs
-      namespace: openebs-system
+  - name: openebs
+    namespace: openebs-system
   values:
-    initContainers:
-      init-db:
-        image: ghcr.io/onedr0p/postgres-init:16.2
-        imagePullPolicy: IfNotPresent
-        envFrom:
-        - secretRef:
-            name: home-assistant-secret
+
     controllers:
       home-assistant:
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.2
+              pullPolicy: IfNotPresent
+            envFrom:
+            - secretRef:
+                name: home-assistant-secret
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -53,8 +56,8 @@ spec:
               HASS_HTTP_TRUSTED_PROXY_5: 10.10.0.0/16
               HASS_HTTP_TRUSTED_PROXY_7: 100.64.0.0/10
             envFrom:
-              - secretRef:
-                  name: home-assistant-secret
+            - secretRef:
+                name: home-assistant-secret
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -66,10 +69,9 @@ spec:
                 memory: 1Gi
         pod:
           securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            runAsNonRoot: true
-            fsGroup: 568
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
     service:
       app:
@@ -83,14 +85,14 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/target: external.chalk-ho.ke
         hosts:
-          - host: &host hass.chalk-ho.ke
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        - host: &host hass.chalk-ho.ke
+          paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
         tls:
-          - hosts: [*host]
+        - hosts: [*host]
     persistence:
       config:
         enabled: true
