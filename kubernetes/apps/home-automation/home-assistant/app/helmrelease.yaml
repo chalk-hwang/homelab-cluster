@@ -43,7 +43,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
-        containers:
+        initContainers:
           init-db:
             image:
               repository: ghcr.io/onedr0p/postgres-init
@@ -52,6 +52,7 @@ spec:
             envFrom:
             - secretRef:
                 name: home-assistant-secret
+        containers:
           # Configure the main application container
           main:
             image:
