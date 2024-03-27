@@ -58,9 +58,9 @@ spec:
             - secretRef:
                 name: home-assistant-secret
             securityContext:
-              # allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              # capabilities: { drop: ["ALL"] }
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
@@ -70,14 +70,17 @@ spec:
           hostNetwork: true
           dnsPolicy: "ClusterFirstWithHostNet"
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
     service:
       app:
         annotations:
-          io.cilium/lb-ipam-ips: 10.10.1.30
+          io.cilium/lb-ipam-ips: "10.10.1.10"
+          tailscale.com/expose: "true"
+          tailscale.com/hostname: "hass"
         controller: home-assistant
         ports:
           http:
@@ -139,9 +142,9 @@ spec:
           TZ: Asia/Seoul
           HASS_SERVER: http://localhost:8123
         securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
-          fsGroup: 1000
+          runAsUser: 568
+          runAsGroup: 568
+          fsGroup: 568
           fsGroupChangePolicy: "OnRootMismatch"
         ingress:
           enabled: true
