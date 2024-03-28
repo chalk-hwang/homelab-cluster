@@ -39,7 +39,7 @@ spec:
       mode: "cluster-pool"
       operator:
         clusterPoolIPv4PodCIDRList:
-          - "10.12.0.0/16"
+        - "10.12.0.0/16"
         clusterPoolIPv4MaskSize: 24
     ipv4NativeRoutingCIDR: "10.11.0.0/16"
     k8sServiceHost: 127.0.0.1
