@@ -27,9 +27,9 @@ spec:
     containerRuntime:
       integration: containerd
       socketPath: /var/run/k3s/containerd/containerd.sock
-    # NOTE: This might need to be set if you have more than one active NIC on your hosts
-    # devices:
-    # - bridge0
+    NOTE: This might need to be set if you have more than one active NIC on your hosts
+    devices:
+    - end0
     l7Proxy: true
     endpointRoutes:
       enabled: true
